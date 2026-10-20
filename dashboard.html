@@ -1,0 +1,170 @@
+<!-- dashboard.html -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard | Scholarship Monitoring</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <h1>Scholarship Monitoring &amp; Compliance</h1>
+  <div class="who">
+    <span id="whoName">…</span>
+    <span id="whoRole" class="pill">…</span>
+    <button id="btnLogout" class="btn ghost">Sign out</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ SCHOLAR ============ -->
+  <section id="scholarView" hidden>
+    <div class="card">
+      <h2>My scholarship</h2>
+      <p id="scholarProgram" class="muted">Loading…</p>
+    </div>
+
+    <div class="card">
+      <h2 id="formTitle">Submit semester academic summary</h2>
+      <form id="formSubmit" class="grid2">
+        <input type="hidden" name="editing_id">
+        <label>Academic year
+          <input name="academic_year" value="2026-2027" required>
+        </label>
+        <label>Semester
+          <select name="semester">
+            <option value="1st">1st Semester</option>
+            <option value="2nd">2nd Semester</option>
+            <option value="Summer">Summer</option>
+          </select>
+        </label>
+        <label>GWA (1.00 best – 5.00 failing)
+          <input name="gwa" type="number" step="0.01" min="1" max="5" required>
+        </label>
+        <label>Enrolled units
+          <input name="enrolled_units" type="number" min="0" step="1" required>
+        </label>
+        <label>Failed subjects
+          <input name="failed_count" type="number" min="0" step="1" value="0" required>
+        </label>
+        <label>Incomplete grades
+          <input name="incomplete_count" type="number" min="0" step="1" value="0" required>
+        </label>
+        <label>Dropped subjects
+          <input name="dropped_count" type="number" min="0" step="1" value="0" required>
+        </label>
+        <label>Grade document reference
+          <input name="evidence_ref" placeholder="e.g. REG-2026-00123" required>
+        </label>
+        <div class="actions">
+          <button class="btn primary" type="submit">Submit</button>
+          <button class="btn ghost" type="button" id="btnCancelEdit" hidden>Cancel</button>
+        </div>
+      </form>
+      <p id="msg" class="msg" role="status"></p>
+    </div>
+
+    <div class="card">
+      <h2>My submissions</h2>
+      <div class="table-wrap">
+        <table id="tblMine">
+          <thead>
+            <tr>
+              <th>AY / Sem</th><th>GWA</th><th>Units</th><th>F / INC / Drop</th>
+              <th>Evidence</th><th>Submitted (Asia/Manila)</th>
+              <th>Verification</th><th>Compliance</th><th>Renewal</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAFF ============ -->
+  <section id="staffView" hidden>
+
+    <div class="kpis">
+      <div class="kpi"><span class="kpi-label">Assigned scholars</span><span id="kpiAssigned" class="kpi-value">0</span></div>
+      <div class="kpi"><span class="kpi-label">Pending verification</span><span id="kpiPending" class="kpi-value">0</span></div>
+      <div class="kpi"><span class="kpi-label">Compliant</span><span id="kpiCompliant" class="kpi-value">0</span></div>
+      <div class="kpi"><span class="kpi-label">With deficiency</span><span id="kpiDeficient" class="kpi-value">0</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Scholars</h2>
+      <form id="formAssign" class="grid2">
+        <label>Scholar email (must already have an account)
+          <input name="email" type="email" placeholder="s07@exam.test" required>
+        </label>
+        <label>Student ID
+          <input name="student_id" placeholder="S-A07" required>
+        </label>
+        <label>Full name
+          <input name="full_name" placeholder="Test Scholar A07" required>
+        </label>
+        <label>Program
+          <select name="program_id" id="selAssignProgram" required></select>
+        </label>
+        <div class="actions">
+          <button class="btn primary" type="submit">Register / assign scholar</button>
+        </div>
+      </form>
+      <p id="assignMsg" class="msg" role="status"></p>
+    </div>
+
+    <div class="card">
+      <h2>Submissions</h2>
+
+      <div class="filters">
+        <input id="q" type="search" placeholder="Search by student ID or name…">
+        <select id="fProgram"><option value="">All programs</option></select>
+        <select id="fCompliance">
+          <option value="">All compliance results</option>
+          <option value="Compliant">Compliant</option>
+          <option value="With Deficiency">With Deficiency</option>
+          <option value="__none">Not yet evaluated</option>
+        </select>
+        <select id="fVerification">
+          <option value="">All verification states</option>
+          <option value="Pending">Pending</option>
+          <option value="Verified">Verified</option>
+          <option value="Returned">Returned</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table id="tblAll">
+          <thead>
+            <tr>
+              <th>Scholar</th><th>Program</th><th>AY / Sem</th>
+              <th>GWA</th><th>Units</th><th>F / INC / Drop</th>
+              <th>Submitted</th><th>Verification</th>
+              <th>Compliance</th><th>Renewal</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Decision history</h2>
+      <div class="table-wrap">
+        <table id="tblAudit">
+          <thead><tr><th>When</th><th>Actor</th><th>Action</th><th>Details</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

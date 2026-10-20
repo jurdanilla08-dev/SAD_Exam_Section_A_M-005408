@@ -1,0 +1,62 @@
+<!-- index.html : LOGIN / ENTRY LINK -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign in | Scholarship Monitoring System</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="auth-page">
+  <main class="auth-card">
+    <h1>Scholarship Monitoring &amp; Academic Compliance System</h1>
+    <p class="muted">Scholarship Office — Section A Midterm Build</p>
+
+    <form id="formLogin">
+      <label>Email
+        <input type="email" name="email" autocomplete="email" required>
+      </label>
+      <label>Password
+        <input type="password" name="password" autocomplete="current-password" required>
+      </label>
+      <button class="btn primary" type="submit">Sign in</button>
+    </form>
+
+    <p id="msg" class="msg" role="status"></p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script>
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    /* If a session already exists, go straight to the dashboard. */
+    (async () => {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session) window.location.replace('dashboard.html');
+    })();
+
+    document.getElementById('formLogin').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('msg');
+      const f = new FormData(e.target);
+      msg.textContent = 'Signing in…';
+      msg.className = 'msg';
+
+      const { error } = await sb.auth.signInWithPassword({
+        email: f.get('email').trim(),
+        password: f.get('password')
+      });
+
+      if (error) {
+        msg.textContent = 'Sign-in failed: ' + error.message;
+        msg.className = 'msg err';
+        return;
+      }
+
+      /* ===== REDIRECT TO DASHBOARD ===== */
+      window.location.assign('dashboard.html');
+    });
+  </script>
+</body>
+</html>
